@@ -1,0 +1,292 @@
+/* Button Variant Styles */
+
+/* Soft variant combinations */
+.btn-soft-secondary {
+    background-color: hsl(var(--btn-secondary-soft));
+    color: hsl(var(--btn-secondary-text));
+}
+
+.btn-soft-secondary:hover:not(:disabled) {
+    background-color: hsl(var(--btn-secondary-hover));
+}
+
+.btn-soft-success {
+    background-color: hsl(var(--btn-success-soft));
+    color: hsl(var(--btn-success-text));
+}
+
+.btn-soft-success:hover:not(:disabled) {
+    background-color: hsl(var(--btn-success-hover));
+}
+
+.btn-soft-info {
+    background-color: hsl(var(--btn-info-soft));
+    color: hsl(var(--btn-info-text));
+}
+
+.btn-soft-info:hover:not(:disabled) {
+    background-color: hsl(var(--btn-info-hover));
+}
+
+.btn-soft-warn {
+    background-color: hsl(var(--btn-warn-soft));
+    color: hsl(var(--btn-warn-text));
+}
+
+.btn-soft-warn:hover:not(:disabled) {
+    background-color: hsl(var(--btn-warn-hover));
+}
+
+.btn-soft-help {
+    background-color: hsl(var(--btn-help-soft));
+    color: hsl(var(--btn-help-text));
+}
+
+.btn-soft-help:hover:not(:disabled) {
+    background-color: hsl(var(--btn-help-hover));
+}
+
+.btn-soft-danger {
+    background-color: hsl(var(--btn-danger-soft));
+    color: hsl(var(--btn-danger-text));
+}
+
+.btn-soft-danger:hover:not(:disabled) {
+    background-color: hsl(var(--btn-danger-hover));
+}
+
+.btn-soft-contrast {
+    background-color: hsl(var(--btn-contrast-soft));
+    color: hsl(var(--btn-contrast-text));
+}
+
+.btn-soft-contrast:hover:not(:disabled) {
+    background-color: hsl(var(--btn-contrast-hover));
+}
+
+/* Outlined variant combinations */
+.btn-outlined-secondary {
+    border-color: hsl(var(--btn-secondary-border));
+    color: hsl(var(--btn-secondary-text));
+}
+
+.btn-outlined-secondary:hover:not(:disabled) {
+    background-color: hsl(var(--btn-secondary-soft));
+    color: hsl(var(--btn-secondary-text));
+}
+
+.btn-outlined-success {
+    border-color: hsl(var(--btn-success-border));
+    color: hsl(var(--btn-success-soft));
+}
+
+.btn-outlined-success:hover:not(:disabled) {
+    background-color: hsl(var(--btn-success-soft));
+    color: hsl(var(--btn-success-text));
+}
+
+.btn-outlined-info {
+    border-color: hsl(var(--btn-info-border));
+    color: hsl(var(--btn-info-soft));
+}
+
+.btn-outlined-info:hover:not(:disabled) {
+    background-color: hsl(var(--btn-info-soft));
+    color: hsl(var(--btn-info-text));
+}
+
+.btn-outlined-warn {
+    border-color: hsl(var(--btn-warn-border));
+    color: hsl(var(--btn-warn-soft));
+}
+
+.btn-outlined-warn:hover:not(:disabled) {
+    background-color: hsl(var(--btn-warn-soft));
+    color: hsl(var(--btn-warn-text));
+}
+
+.btn-outlined-help {
+    border-color: hsl(var(--btn-help-border));
+    color: hsl(var(--btn-help-soft));
+}
+
+.btn-outlined-help:hover:not(:disabled) {
+    background-color: hsl(var(--btn-help-soft));
+    color: hsl(var(--btn-help-text));
+}
+
+.btn-outlined-danger {
+    border-color: hsl(var(--btn-danger-border));
+    color: hsl(var(--btn-danger-soft));
+}
+
+.btn-outlined-danger:hover:not(:disabled) {
+    background-color: hsl(var(--btn-danger-soft));
+    color: hsl(var(--btn-danger-text));
+}
+
+.btn-outlined-contrast {
+    border-color: hsl(var(--btn-contrast-border));
+    color: hsl(var(--btn-contrast-soft));
+}
+
+.btn-outlined-contrast:hover:not(:disabled) {
+    background-color: hsl(var(--btn-contrast-soft));
+    color: hsl(var(--btn-contrast-text));
+}
+
+/* Subtle variant combinations */
+.btn-subtle-secondary {
+    background-color: hsl(var(--btn-secondary-subtle));
+    color: hsl(var(--btn-secondary-text));
+}
+
+.btn-subtle-secondary:hover:not(:disabled) {
+    background-color: hsl(var(--btn-secondary-hover));
+}
+
+.btn-subtle-success {
+    background-color: hsl(var(--btn-success-subtle));
+    color: hsl(var(--btn-success-subtle-text));
+}
+
+.btn-subtle-success:hover:not(:disabled) {
+    background-color: hsl(var(--btn-success-soft));
+    color: hsl(var(--btn-success-text));
+}
+
+.btn-subtle-info {
+    background-color: hsl(var(--btn-info-subtle));
+    color: hsl(var(--btn-info-subtle-text));
+}
+
+.btn-subtle-info:hover:not(:disabled) {
+    background-color: hsl(var(--btn-info-soft));
+    color: hsl(var(--btn-info-text));
+}
+
+.btn-subtle-warn {
+    background-color: hsl(var(--btn-warn-subtle));
+    color: hsl(var(--btn-warn-subtle-text));
+}
+
+.btn-subtle-warn:hover:not(:disabled) {
+    background-color: hsl(var(--btn-warn-soft));
+    color: hsl(var(--btn-warn-text));
+}
+
+.btn-subtle-help {
+    background-color: hsl(var(--btn-help-subtle));
+    color: hsl(var(--btn-help-subtle-text));
+}
+
+.btn-subtle-help:hover:not(:disabled) {
+    background-color: hsl(var(--btn-help-soft));
+    color: hsl(var(--btn-help-text));
+}
+
+.btn-subtle-danger {
+    background-color: hsl(var(--btn-danger-subtle));
+    color: hsl(var(--btn-danger-subtle-text));
+}
+
+.btn-subtle-danger:hover:not(:disabled) {
+    background-color: hsl(var(--btn-danger-soft));
+    color: hsl(var(--btn-danger-text));
+}
+
+.btn-subtle-contrast {
+    background-color: hsl(var(--btn-contrast-subtle));
+    color: hsl(var(--btn-contrast-subtle-text));
+}
+
+.btn-subtle-contrast:hover:not(:disabled) {
+    background-color: hsl(var(--btn-contrast-soft));
+    color: hsl(var(--btn-contrast-text));
+}
+
+/* Ghost variant combinations */
+.btn-ghost-secondary {
+    color: hsl(var(--btn-secondary-text));
+}
+
+.btn-ghost-secondary:hover:not(:disabled) {
+    background-color: hsl(var(--btn-secondary-subtle));
+}
+
+.btn-ghost-success {
+    color: hsl(var(--btn-success-subtle-text));
+}
+
+.btn-ghost-success:hover:not(:disabled) {
+    background-color: hsl(var(--btn-success-subtle));
+}
+
+.btn-ghost-info {
+    color: hsl(var(--btn-info-subtle-text));
+}
+
+.btn-ghost-info:hover:not(:disabled) {
+    background-color: hsl(var(--btn-info-subtle));
+}
+
+.btn-ghost-warn {
+    color: hsl(var(--btn-warn-subtle-text));
+}
+
+.btn-ghost-warn:hover:not(:disabled) {
+    background-color: hsl(var(--btn-warn-subtle));
+}
+
+.btn-ghost-help {
+    color: hsl(var(--btn-help-subtle-text));
+}
+
+.btn-ghost-help:hover:not(:disabled) {
+    background-color: hsl(var(--btn-help-subtle));
+}
+
+.btn-ghost-danger {
+    color: hsl(var(--btn-danger-subtle-text));
+}
+
+.btn-ghost-danger:hover:not(:disabled) {
+    background-color: hsl(var(--btn-danger-subtle));
+}
+
+.btn-ghost-contrast {
+    color: hsl(var(--btn-contrast-subtle-text));
+}
+
+.btn-ghost-contrast:hover:not(:disabled) {
+    background-color: hsl(var(--btn-contrast-subtle));
+}
+
+/* Link variant combinations */
+.btn-link-secondary {
+    color: hsl(var(--btn-secondary-text));
+}
+
+.btn-link-success {
+    color: hsl(var(--btn-success-subtle-text));
+}
+
+.btn-link-info {
+    color: hsl(var(--btn-info-subtle-text));
+}
+
+.btn-link-warn {
+    color: hsl(var(--btn-warn-subtle-text));
+}
+
+.btn-link-help {
+    color: hsl(var(--btn-help-subtle-text));
+}
+
+.btn-link-danger {
+    color: hsl(var(--btn-danger-subtle-text));
+}
+
+.btn-link-contrast {
+    color: hsl(var(--btn-contrast-subtle-text));
+}

@@ -1,0 +1,6 @@
+export { default as Form } from './Form.vue'
+export { default as FormField } from './FormField.vue'
+export { default as FormLabel } from './FormLabel.vue'
+export { default as FormControl } from './FormControl.vue'
+export { default as FormMessage } from './FormMessage.vue'
+export { default as FormInput } from './FormInput.vue'
