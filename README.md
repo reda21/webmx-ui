@@ -2,7 +2,7 @@
 
 A modern, accessible Vue 3 component library built with TypeScript, Tailwind CSS, and Radix Vue. Designed for building beautiful, responsive web applications.
 
-[![npm version](https://badge.fury.io/js/@reda21/web-ui.svg)](https://badge.fury.io/js/@reda21/web-ui)
+[![npm version](https://badge.fury.io/js/webmx-ui.svg)](https://badge.fury.io/js/webmx-ui)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## ✨ Features
@@ -19,13 +19,13 @@ A modern, accessible Vue 3 component library built with TypeScript, Tailwind CSS
 
 ```bash
 # npm
-npm install @reda21/web-ui
+npm install webmx-ui
 
 # pnpm
-pnpm add @reda21/web-ui
+pnpm add webmx-ui
 
 # yarn
-yarn add @reda21/web-ui
+yarn add webmx-ui
 ```
 
 ### Peer Dependencies
@@ -44,14 +44,14 @@ Import the CSS file in your main entry file:
 
 ```ts
 // main.ts or main.js
-import '@reda21/web-ui/dist/web-ui.css'
+import 'webmx-ui/dist/web-ui.css'
 ```
 
 ### Use Components
 
 ```vue
 <script setup>
-import { Button, Card, CardHeader, CardTitle, CardContent } from '@reda21/web-ui'
+import { Button, Card, CardHeader, CardTitle, CardContent } from 'webmx-ui'
 </script>
 
 <template>
@@ -76,7 +76,7 @@ A versatile button component with multiple variants, severities, and sizes.
 
 ```vue
 <script setup>
-import { Button } from '@reda21/web-ui'
+import { Button } from 'webmx-ui'
 </script>
 
 <template>
@@ -141,7 +141,7 @@ import {
   CardDescription, 
   CardContent, 
   CardFooter 
-} from '@reda21/web-ui'
+} from 'webmx-ui'
 </script>
 
 <template>
@@ -179,7 +179,7 @@ A flexible input component with auto-binding, validation support, and multiple s
 
 ```vue
 <script setup>
-import { Input } from '@reda21/web-ui'
+import { Input } from 'webmx-ui'
 import { ref } from 'vue'
 
 const name = ref('')
@@ -242,7 +242,7 @@ A multiline text input component.
 
 ```vue
 <script setup>
-import { Textarea } from '@reda21/web-ui'
+import { Textarea } from 'webmx-ui'
 import { ref } from 'vue'
 
 const message = ref('')
@@ -264,7 +264,7 @@ A powerful form system with built-in validation support for Zod, Yup, or custom 
 
 ```vue
 <script setup>
-import { Form, FormField, FormInput, Input, Button } from '@reda21/web-ui'
+import { Form, FormField, FormInput, Input, Button } from 'webmx-ui'
 
 const schema = {
   name: [
@@ -312,7 +312,7 @@ const onSubmit = (values) => {
 
 ```vue
 <script setup>
-import { Form, FormInput, Button } from '@reda21/web-ui'
+import { Form, FormInput, Button } from 'webmx-ui'
 import * as yup from 'yup'
 
 const schema = yup.object({
@@ -338,7 +338,7 @@ const onSubmit = (values) => {
 
 ```vue
 <script setup>
-import { Form, FormInput, Button } from '@reda21/web-ui'
+import { Form, FormInput, Button } from 'webmx-ui'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -366,7 +366,7 @@ For more control, use the `useForm` composable directly:
 
 ```vue
 <script setup>
-import { useForm, Input, Button } from '@reda21/web-ui'
+import { useForm, Input, Button } from 'webmx-ui'
 
 const { values, errors, handleSubmit, register, resetForm } = useForm({
   initialValues: { name: '', email: '' },
@@ -415,7 +415,7 @@ A component for displaying user avatars with fallback support.
 
 ```vue
 <script setup>
-import { Avatar, AvatarImage, AvatarFallback } from '@reda21/web-ui'
+import { Avatar, AvatarImage, AvatarFallback } from 'webmx-ui'
 </script>
 
 <template>
@@ -434,7 +434,7 @@ A small status indicator component.
 
 ```vue
 <script setup>
-import { Badge } from '@reda21/web-ui'
+import { Badge } from 'webmx-ui'
 </script>
 
 <template>
@@ -453,7 +453,7 @@ A popup that displays information on hover.
 
 ```vue
 <script setup>
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, Button } from '@reda21/web-ui'
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, Button } from 'webmx-ui'
 </script>
 
 <template>
@@ -488,7 +488,7 @@ import {
   DrawerFooter,
   DrawerClose,
   Button 
-} from '@reda21/web-ui'
+} from 'webmx-ui'
 </script>
 
 <template>
@@ -523,7 +523,7 @@ A date selection component.
 
 ```vue
 <script setup>
-import { DatePicker } from '@reda21/web-ui'
+import { DatePicker } from 'webmx-ui'
 import { ref } from 'vue'
 
 const date = ref(null)
@@ -584,3 +584,4 @@ Contributions are welcome! Please read our contributing guidelines before submit
 ## 🐛 Bug Reports
 
 Found a bug? Please open an issue with a clear description and reproduction steps.
+
