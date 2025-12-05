@@ -13,7 +13,9 @@ export interface FieldMeta {
     dirty: boolean
     error?: string
     valid: boolean
+    validated: boolean
     pending: boolean
+    initialValue?: any
 }
 
 export interface FormMeta {
@@ -76,7 +78,7 @@ export interface UseFormReturn<T = Record<string, any>> {
     getFieldError: (name: string) => string | undefined
     getFieldMeta: (name: string) => FieldMeta
 
-    validateField: (name: string, rules?: ValidationRule[]) => Promise<{ valid: boolean; errors: string[] }>
+    validateField: (name: string, rules?: ValidationRule[], bails?: boolean) => Promise<{ valid: boolean; errors: string[] }>
     validate: () => Promise<{ valid: boolean; errors: Record<string, string> }>
 
     handleSubmit: (onValid?: (data: T, ctx: SubmissionContext) => void | Promise<void>, onInvalid?: (errors: Record<string, string[]>) => void) => (e?: Event) => Promise<void>
@@ -93,60 +95,71 @@ export interface UseFormReturn<T = Record<string, any>> {
     }
 }
 
-function validateValue(value: any, rules: ValidationRule[]): string | undefined {
+function validateValue(value: any, rules: ValidationRule[], bails: boolean = true): string[] {
+    const errors: string[] = []
+
     for (const rule of rules) {
+        let error: string | undefined
+
         switch (rule.type) {
             case 'required':
                 if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'email':
                 if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'min':
                 if (typeof value === 'number' && value < rule.value) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'max':
                 if (typeof value === 'number' && value > rule.value) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'minLength':
                 if (typeof value === 'string' && value.length < rule.value) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'maxLength':
                 if (typeof value === 'string' && value.length > rule.value) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'pattern':
                 if (value && !rule.value.test(value)) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
 
             case 'custom':
                 if (value && !rule.value(value)) {
-                    return rule.message
+                    error = rule.message
                 }
                 break
         }
+
+        if (error) {
+            errors.push(error)
+            if (bails) {
+                return errors
+            }
+        }
     }
 
-    return undefined
+    return errors
 }
 
 export function useForm<T extends Record<string, any> = Record<string, any>>(
@@ -176,7 +189,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
     // Initialize touched from initialTouched
     Object.entries(initialTouched).forEach(([key, val]) => {
         if (!fieldsMeta.value[key]) {
-            fieldsMeta.value[key] = { touched: val, dirty: false, valid: true, pending: false }
+            fieldsMeta.value[key] = { touched: val, dirty: false, valid: true, validated: false, pending: false }
         } else {
             fieldsMeta.value[key].touched = val
         }
@@ -219,7 +232,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
         (values.value as any)[name] = value
 
         if (!fieldsMeta.value[name]) {
-            fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, pending: false }
+            fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, validated: false, pending: false }
         }
         fieldsMeta.value[name].dirty = true
     }
@@ -246,7 +259,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
 
     const setFieldTouched = (name: string, isTouched: boolean) => {
         if (!fieldsMeta.value[name]) {
-            fieldsMeta.value[name] = { touched: isTouched, dirty: false, valid: true, pending: false }
+            fieldsMeta.value[name] = { touched: isTouched, dirty: false, valid: true, validated: false, pending: false }
         } else {
             fieldsMeta.value[name].touched = isTouched
         }
@@ -264,7 +277,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
 
     const getFieldMeta = (name: string): FieldMeta => {
         if (!fieldsMeta.value[name]) {
-            fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, pending: false }
+            fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, validated: false, pending: false }
         }
         // Update error state in meta
         fieldsMeta.value[name].error = getFieldError(name)
@@ -273,7 +286,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
         return fieldsMeta.value[name]
     }
 
-    const validateField = async (name: string, rules?: ValidationRule[]): Promise<{ valid: boolean; errors: string[] }> => {
+    const validateField = async (name: string, rules?: ValidationRule[], bails: boolean = true): Promise<{ valid: boolean; errors: string[] }> => {
         const value = (values.value as any)[name]
         const rulesToUse = rules || fieldRules.value[name]
 
@@ -314,10 +327,10 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
 
         // Validation with rules
         if (rulesToUse) {
-            const error = validateValue(value, rulesToUse)
-            if (error) {
-                errors.value[name] = [error]
-                return { valid: false, errors: [error] }
+            const fieldErrors = validateValue(value, rulesToUse, bails)
+            if (fieldErrors.length > 0) {
+                errors.value[name] = fieldErrors
+                return { valid: false, errors: fieldErrors }
             } else {
                 delete errors.value[name]
                 return { valid: true, errors: [] }
@@ -420,7 +433,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
         fieldsMeta.value = {}
         if (state?.touched) {
             Object.entries(state.touched).forEach(([key, val]) => {
-                fieldsMeta.value[key] = { touched: val, dirty: false, valid: true, pending: false }
+                fieldsMeta.value[key] = { touched: val, dirty: false, valid: true, validated: false, pending: false }
             })
         }
 
@@ -511,7 +524,7 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
             },
             onBlur: () => {
                 if (!fieldsMeta.value[name]) {
-                    fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, pending: false }
+                    fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, validated: false, pending: false }
                 }
                 fieldsMeta.value[name].touched = true
 

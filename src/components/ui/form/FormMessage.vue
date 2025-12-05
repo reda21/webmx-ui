@@ -13,8 +13,7 @@ const message = computed(() => props.error || fieldError.value)
 </script>
 
 <template>
-    <p v-if="message" :class="cn('text-sm font-medium', props.class)"
-        style="color: hsl(var(--destructive, 0 84% 60%));">
+    <p v-if="message" :class="cn('text-sm font-medium text-red-500', props.class)">
         {{ message }}
     </p>
 </template>

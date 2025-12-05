@@ -219,8 +219,9 @@ const inputClasses = computed(() => {
     const currentSize = props.size || 'md'
 
     return cn(
-        'flex w-full rounded-md border bg-background file:border-0 file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all',
+        'flex w-full rounded-md border border-input bg-background file:border-0 file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-all',
         sizeClasses[currentSize],
+        hasError.value && 'border-destructive focus-visible:ring-destructive',
         isHighlighted.value && 'animate-shake',
         effectiveLoading.value && 'pr-10',
         props.class
@@ -230,16 +231,12 @@ const inputClasses = computed(() => {
 // Check if there's a custom error or field error
 const hasError = computed(() => props.error || hasFieldError.value)
 
-// Compute inline styles for error state (to work without CSS variables)
-const inputStyles = computed(() => {
-    if (hasError.value) {
-        return {
-            borderColor: 'hsl(0 84% 60%)', // Red destructive color
-            '--tw-ring-color': 'hsl(0 84% 60%)'
-        }
-    }
-    return {}
+watch(() => hasError.value, (val) => {
+    console.log('[Input] hasError changed:', val, 'fieldName:', fieldName)
 })
+
+// Remove inputStyles as we use classes now
+const inputStyles = computed(() => ({}))
 
 // Compute effective error message
 const effectiveError = computed(() => {
@@ -278,7 +275,8 @@ const displayValue = computed(() => {
             <slot :error="effectiveError">
                 <input :id="inputName" :type="type || 'text'" :value="displayValue"
                     :disabled="disabled || effectiveLoading" :placeholder="inputPlaceholder" :required="required"
-                    :name="inputName" :class="inputClasses" :style="inputStyles" @input="handleInput"
+                    :name="inputName" :class="inputClasses"
+                    :style="hasError ? { borderColor: 'red', borderWidth: '2px' } : {}" @input="handleInput"
                     @blur="handleBlur" />
             </slot>
 

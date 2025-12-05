@@ -25,11 +25,18 @@ const emit = defineEmits<{
 // Inject error state from FormField (if available)
 const hasFieldError = inject<ComputedRef<boolean>>('hasFieldError', computed(() => false))
 
+// Helper to parse "YYYY-MM-DD" string into a Local Date object (at 00:00:00)
+// This avoids timezone issues with new Date("YYYY-MM-DD") defaulting to UTC
+const parseDate = (dateStr?: string): Date | undefined => {
+    if (!dateStr) return undefined
+    const [year, month, day] = dateStr.split('-').map(Number)
+    return new Date(year, month - 1, day)
+}
+
 // Convert string date to Date object for v-calendar
 const dateValue = computed({
     get: () => {
-        if (!props.modelValue) return null
-        return new Date(props.modelValue)
+        return parseDate(props.modelValue) ?? null
     },
     set: (value: Date | null) => {
         if (value) {
@@ -45,8 +52,8 @@ const dateValue = computed({
 })
 
 // Convert min/max strings to Date objects
-const minDate = computed(() => props.min ? new Date(props.min) : undefined)
-const maxDate = computed(() => props.max ? new Date(props.max) : undefined)
+const minDate = computed(() => parseDate(props.min))
+const maxDate = computed(() => parseDate(props.max))
 
 // Format for display (DD/MM/YYYY)
 const displayValue = computed(() => {

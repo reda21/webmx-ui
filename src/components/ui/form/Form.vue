@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<{
     keepValues?: boolean
     name?: string
     form?: UseFormReturn<any> // Optional: allow passing existing form instance
+    onSubmit?: (values: Record<string, any>, ctx: any) => void | Promise<void>
 }>(), {
     as: 'form',
     initialValues: () => ({}),
@@ -35,8 +36,12 @@ const internalForm = !props.form ? useForm({
     initialTouched: props.initialTouched,
     validationSchema: props.validationSchema,
     validateOnMount: props.validateOnMount,
-    onSubmit: (values, ctx) => {
-        emit('submit', values, ctx)
+    onSubmit: async (values, ctx) => {
+        if (props.onSubmit) {
+            await props.onSubmit(values, ctx)
+        } else {
+            emit('submit', values, ctx)
+        }
     }
 }) : null
 
