@@ -1,20 +1,32 @@
 <script setup lang="ts">
-import { ref, computed, inject, type ComputedRef } from 'vue'
-import { DatePicker as VCalendarDatePicker } from 'v-calendar'
+import { computed, inject, type ComputedRef } from 'vue'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 import { cn } from '@/lib/utils'
-import 'v-calendar/style.css'
+
+type SupportedLocale = 'fr' | 'en' | 'ar' | 'es' | 'de'
+
+const LOCALE_CONFIG: Record<SupportedLocale, { dir: 'ltr' | 'rtl' }> = {
+    fr: { dir: 'ltr' },
+    en: { dir: 'ltr' },
+    ar: { dir: 'rtl' },
+    es: { dir: 'ltr' },
+    de: { dir: 'ltr' },
+}
 
 interface DatePickerProps {
-    modelValue?: string
+    modelValue?: string | Date
     placeholder?: string
     min?: string
     max?: string
     disabled?: boolean
     class?: string
+    locale?: SupportedLocale
 }
 
 const props = withDefaults(defineProps<DatePickerProps>(), {
     placeholder: 'Sélectionner une date',
+    locale: 'fr',
 })
 
 const emit = defineEmits<{
@@ -22,60 +34,44 @@ const emit = defineEmits<{
     'blur': []
 }>()
 
-// Inject error state from FormField (if available)
 const hasFieldError = inject<ComputedRef<boolean>>('hasFieldError', computed(() => false))
 
-// Helper to parse "YYYY-MM-DD" string into a Local Date object (at 00:00:00)
-// This avoids timezone issues with new Date("YYYY-MM-DD") defaulting to UTC
-const parseDate = (dateStr?: string): Date | undefined => {
-    if (!dateStr) return undefined
-    const [year, month, day] = dateStr.split('-').map(Number)
+const localeConfig = computed(() => LOCALE_CONFIG[props.locale] || LOCALE_CONFIG.fr)
+
+const parseDate = (value?: string | Date): Date | undefined => {
+    if (!value) return undefined
+    if (value instanceof Date) return isNaN(value.getTime()) ? undefined : value
+    if (typeof value !== 'string' || value.trim() === '') return undefined
+    const parts = value.split('-').map(Number)
+    if (parts.length !== 3 || parts.some(isNaN)) return undefined
+    const [year, month, day] = parts
     return new Date(year, month - 1, day)
 }
 
-// Convert string date to Date object for v-calendar
+const formatDateToISO = (date: Date): string => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+}
+
 const dateValue = computed({
-    get: () => {
-        return parseDate(props.modelValue) ?? null
-    },
-    set: (value: Date | null) => {
-        if (value) {
-            // Convert Date to YYYY-MM-DD string format
-            const year = value.getFullYear()
-            const month = String(value.getMonth() + 1).padStart(2, '0')
-            const day = String(value.getDate()).padStart(2, '0')
-            emit('update:modelValue', `${year}-${month}-${day}`)
+    get: () => parseDate(props.modelValue),
+    set: (value: Date | Date[] | null | undefined) => {
+        if (value instanceof Date) {
+            emit('update:modelValue', formatDateToISO(value))
+        } else if (Array.isArray(value) && value[0] instanceof Date) {
+            emit('update:modelValue', formatDateToISO(value[0]))
         } else {
             emit('update:modelValue', '')
         }
     }
 })
 
-// Convert min/max strings to Date objects
 const minDate = computed(() => parseDate(props.min))
 const maxDate = computed(() => parseDate(props.max))
 
-// Format for display (DD/MM/YYYY)
-const displayValue = computed(() => {
-    if (!props.modelValue) return props.placeholder
-
-    try {
-        const date = new Date(props.modelValue)
-        return date.toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        })
-    } catch {
-        return props.placeholder
-    }
-})
-
-const isOpen = ref(false)
-
-const handleBlur = () => {
-    emit('blur')
-}
+const handleBlur = () => emit('blur')
 
 const inputClasses = computed(() => cn(
     'flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background',
@@ -88,108 +84,100 @@ const inputClasses = computed(() => cn(
         : 'border-input focus-visible:ring-ring',
     props.class
 ))
+
+const containerClasses = computed(() => cn(
+    'relative',
+    localeConfig.value.dir === 'rtl' && 'rtl'
+))
+
+// Format display based on locale
+const formatDisplay = computed(() => {
+    switch (props.locale) {
+        case 'en':
+            return 'MM/dd/yyyy'
+        case 'ar':
+            return 'dd MMMM yyyy'
+        default:
+            return 'dd/MM/yyyy'
+    }
+})
 </script>
 
 <template>
-    <div class="relative">
-        <VCalendarDatePicker v-model="dateValue" :min-date="minDate" :max-date="maxDate" :disabled="disabled"
-            :popover="{ visibility: 'click' }" @blur="handleBlur">
-            <template #default="{ inputValue, inputEvents }">
-                <input :value="displayValue" v-on="inputEvents" :disabled="disabled" :class="inputClasses" readonly />
+    <div :class="containerClasses">
+        <VueDatePicker v-model="dateValue" :format="formatDisplay" :min-date="minDate" :max-date="maxDate"
+            :disabled="disabled" :placeholder="placeholder" :enable-time-picker="false" auto-apply
+            :text-input="{ enterSubmit: true, tabSubmit: true }" @blur="handleBlur">
+            <template #dp-input="{ value, onInput, onEnter, onTab, onBlur, onKeypress, onPaste }">
+                <input :value="value" :placeholder="placeholder" :disabled="disabled" :class="inputClasses"
+                    :dir="localeConfig.dir" readonly @input="onInput" @keydown.enter="onEnter" @keydown.tab="onTab"
+                    @blur="onBlur" @keypress="onKeypress" @paste="onPaste" />
             </template>
-        </VCalendarDatePicker>
+        </VueDatePicker>
     </div>
 </template>
 
 <style>
-/* Personnalisation du calendrier pour correspondre au thème */
-.vc-container {
-    --vc-bg: hsl(var(--background));
-    --vc-border: hsl(var(--border));
-    --vc-focus-ring: hsl(var(--ring));
-    --vc-accent-50: hsl(var(--primary) / 0.1);
-    --vc-accent-100: hsl(var(--primary) / 0.2);
-    --vc-accent-200: hsl(var(--primary) / 0.3);
-    --vc-accent-300: hsl(var(--primary) / 0.4);
-    --vc-accent-400: hsl(var(--primary) / 0.5);
-    --vc-accent-500: hsl(var(--primary) / 0.6);
-    --vc-accent-600: hsl(var(--primary) / 0.7);
-    --vc-accent-700: hsl(var(--primary) / 0.8);
-    --vc-accent-800: hsl(var(--primary) / 0.9);
-    --vc-accent-900: hsl(var(--primary));
-
-    border-radius: 0.5rem;
-    border: 1px solid hsl(var(--border));
-    background: hsl(var(--popover));
-    color: hsl(var(--popover-foreground));
-    font-family: inherit;
+/* Custom styles for vue-datepicker to match shadcn theme */
+:root {
+    --dp-font-family: inherit;
+    --dp-border-radius: 0.5rem;
+    --dp-cell-border-radius: 0.375rem;
+    --dp-font-size: 0.875rem;
+    --dp-preview-font-size: 0.875rem;
+    --dp-time-font-size: 0.875rem;
 }
 
-.vc-popover-content-wrapper {
-    z-index: 50;
+/* Light theme */
+.dp__theme_light {
+    --dp-background-color: hsl(var(--background));
+    --dp-text-color: hsl(var(--foreground));
+    --dp-hover-color: hsl(var(--accent));
+    --dp-hover-text-color: hsl(var(--accent-foreground));
+    --dp-hover-icon-color: hsl(var(--muted-foreground));
+    --dp-primary-color: hsl(var(--primary));
+    --dp-primary-text-color: hsl(var(--primary-foreground));
+    --dp-secondary-color: hsl(var(--secondary));
+    --dp-border-color: hsl(var(--border));
+    --dp-menu-border-color: hsl(var(--border));
+    --dp-border-color-hover: hsl(var(--ring));
+    --dp-disabled-color: hsl(var(--muted));
+    --dp-disabled-color-text: hsl(var(--muted-foreground));
+    --dp-scroll-bar-background: hsl(var(--muted));
+    --dp-scroll-bar-color: hsl(var(--muted-foreground));
+    --dp-success-color: hsl(var(--primary));
+    --dp-success-color-disabled: hsl(var(--muted));
+    --dp-icon-color: hsl(var(--muted-foreground));
+    --dp-danger-color: hsl(var(--destructive));
+    --dp-highlight-color: hsla(var(--primary), 0.1);
 }
 
-.vc-header {
-    padding: 0.75rem;
+/* Dark theme */
+.dp__theme_dark {
+    --dp-background-color: hsl(var(--background));
+    --dp-text-color: hsl(var(--foreground));
+    --dp-hover-color: hsl(var(--accent));
+    --dp-hover-text-color: hsl(var(--accent-foreground));
+    --dp-hover-icon-color: hsl(var(--muted-foreground));
+    --dp-primary-color: hsl(var(--primary));
+    --dp-primary-text-color: hsl(var(--primary-foreground));
+    --dp-secondary-color: hsl(var(--secondary));
+    --dp-border-color: hsl(var(--border));
+    --dp-menu-border-color: hsl(var(--border));
+    --dp-border-color-hover: hsl(var(--ring));
+    --dp-disabled-color: hsl(var(--muted));
+    --dp-disabled-color-text: hsl(var(--muted-foreground));
+    --dp-scroll-bar-background: hsl(var(--muted));
+    --dp-scroll-bar-color: hsl(var(--muted-foreground));
+    --dp-success-color: hsl(var(--primary));
+    --dp-success-color-disabled: hsl(var(--muted));
+    --dp-icon-color: hsl(var(--muted-foreground));
+    --dp-danger-color: hsl(var(--destructive));
+    --dp-highlight-color: hsla(var(--primary), 0.1);
 }
 
-.vc-weeks {
-    padding: 0.5rem;
-}
-
-.vc-weekday {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.vc-day {
-    font-size: 0.875rem;
-}
-
-.vc-day-content {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.375rem;
-    transition: all 0.2s;
-}
-
-.vc-day-content:hover {
-    background: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
-}
-
-.vc-day-content:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--ring));
-}
-
-.vc-highlight {
-    background: hsl(var(--primary)) !important;
-    color: hsl(var(--primary-foreground)) !important;
-}
-
-.vc-day.is-today .vc-day-content {
-    border: 1px solid hsl(var(--primary));
-}
-
-.vc-arrows-container {
-    padding: 0.5rem;
-}
-
-.vc-arrow {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.375rem;
-    transition: all 0.2s;
-}
-
-.vc-arrow:hover {
-    background: hsl(var(--accent));
-}
-
-.vc-title {
-    font-weight: 600;
-    color: hsl(var(--foreground));
+/* RTL support */
+.rtl .dp__main {
+    direction: rtl;
 }
 </style>

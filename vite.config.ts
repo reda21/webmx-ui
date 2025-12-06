@@ -26,7 +26,7 @@ export default defineConfig({
             fileName: 'web-ui',
         },
         rollupOptions: {
-            external: ['vue', 'radix-vue', 'class-variance-authority', 'clsx', 'tailwind-merge', '@iconify/vue', 'vaul-vue', 'yup', 'zod', 'v-calendar'],
+            external: ['vue', 'radix-vue', 'class-variance-authority', 'clsx', 'tailwind-merge', '@iconify/vue', 'vaul-vue', 'yup', 'zod', '@vuepic/vue-datepicker'],
             output: {
                 globals: {
                     vue: 'Vue',
@@ -38,7 +38,7 @@ export default defineConfig({
                     'vaul-vue': 'VaulVue',
                     yup: 'Yup',
                     zod: 'Zod',
-                    'v-calendar': 'VCalendar',
+                    '@vuepic/vue-datepicker': 'VueDatePicker',
                 },
             },
         },
