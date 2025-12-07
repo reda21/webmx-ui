@@ -9,7 +9,7 @@ export default defineConfig({
         vue(),
         tailwindcss(),
         dts({
-            tsconfigPath: './tsconfig.json',
+            tsconfigPath: './tsconfig.build.json',
             rollupTypes: true
         })
     ],
@@ -26,7 +26,7 @@ export default defineConfig({
             fileName: 'web-ui',
         },
         rollupOptions: {
-            external: ['vue', 'radix-vue', 'class-variance-authority', 'clsx', 'tailwind-merge', '@iconify/vue', 'vaul-vue', 'yup', 'zod', '@vuepic/vue-datepicker'],
+            external: ['vue', 'radix-vue', 'class-variance-authority', 'clsx', 'tailwind-merge', '@iconify/vue', 'vaul-vue', 'yup', 'zod', 'primevue', '@primevue/themes', '@primeuix/themes'],
             output: {
                 globals: {
                     vue: 'Vue',
@@ -38,7 +38,9 @@ export default defineConfig({
                     'vaul-vue': 'VaulVue',
                     yup: 'Yup',
                     zod: 'Zod',
-                    '@vuepic/vue-datepicker': 'VueDatePicker',
+                    'primevue': 'PrimeVue',
+                    '@primevue/themes': 'PrimeVueThemes',
+                    '@primeuix/themes': 'PrimeUIThemes'
                 },
             },
         },
