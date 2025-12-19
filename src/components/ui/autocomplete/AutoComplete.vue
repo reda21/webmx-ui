@@ -294,7 +294,7 @@ onUnmounted(() => {
 
         <!-- Suggestions Panel -->
         <div v-if="isOpen && filteredSuggestions.length > 0" ref="panelRef"
-            class="absolute z-50 w-full mt-1 bg-popover border border-input rounded-md shadow-lg max-h-60 overflow-auto"
+            class="absolute z-50 w-full mt-1 bg-popover bg-white dark:bg-zinc-900 border border-input rounded-md shadow-lg max-h-60 overflow-auto"
             role="listbox">
             <div v-for="(item, index) in filteredSuggestions" :key="index" :id="`autocomplete-option-${index}`"
                 role="option" :aria-selected="activeIndex === index" :class="cn(
@@ -307,7 +307,7 @@ onUnmounted(() => {
 
         <!-- Empty Message -->
         <div v-else-if="isOpen && filteredSuggestions.length === 0 && !loading" ref="panelRef"
-            class="absolute z-50 w-full mt-1 bg-popover border border-input rounded-md shadow-lg">
+            class="absolute z-50 w-full mt-1 bg-popover bg-white dark:bg-zinc-900 border border-input rounded-md shadow-lg">
             <div class="px-3 py-2 text-muted-foreground text-sm">
                 {{ emptyMessage }}
             </div>

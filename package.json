@@ -45,7 +45,9 @@
             "import": "./dist/web-ui.js",
             "require": "./dist/web-ui.umd.cjs"
         },
-        "./dist/web-ui.css": "./dist/web-ui.css"
+        "./style.css": "./dist/web-ui.css",
+        "./dist/web-ui.css": "./dist/web-ui.css",
+        "./dist/*": "./dist/*"
     },
     "sideEffects": [
         "*.css"
