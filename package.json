@@ -1,6 +1,6 @@
 {
     "name": "webmx-ui",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A modern, accessible Vue 3 component library built with TypeScript, Tailwind CSS, and Radix Vue",
     "author": "Reda21",
     "license": "MIT",
