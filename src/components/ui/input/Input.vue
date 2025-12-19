@@ -219,9 +219,12 @@ const inputClasses = computed(() => {
     const currentSize = props.size || 'md'
 
     return cn(
-        'flex w-full rounded-md border border-input bg-background file:border-0 file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-all',
+        'flex w-full rounded-md border border-input bg-background file:border-0 file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all',
+        // Disabled state: gray background, reduced opacity, not-allowed cursor
+        'disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-70',
         sizeClasses[currentSize],
-        hasError.value && 'border-destructive focus-visible:ring-destructive',
+        // Error/Invalid state: red border and text color, keep ring on focus
+        hasError.value && 'border-destructive text-destructive placeholder:text-destructive/50 focus-visible:ring-destructive',
         isHighlighted.value && 'animate-shake',
         effectiveLoading.value && 'pr-10',
         props.class
@@ -275,9 +278,7 @@ const displayValue = computed(() => {
             <slot :error="effectiveError">
                 <input :id="inputName" :type="type || 'text'" :value="displayValue"
                     :disabled="disabled || effectiveLoading" :placeholder="inputPlaceholder" :required="required"
-                    :name="inputName" :class="inputClasses"
-                    :style="hasError ? { borderColor: 'red', borderWidth: '2px' } : {}" @input="handleInput"
-                    @blur="handleBlur" />
+                    :name="inputName" :class="inputClasses" @input="handleInput" @blur="handleBlur" />
             </slot>
 
             <div v-if="effectiveLoading" class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
