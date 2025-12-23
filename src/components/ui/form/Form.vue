@@ -48,6 +48,14 @@ const internalForm = !props.form ? useForm({
 // Use provided form or internal form
 const form = props.form || internalForm!
 
+// Watch for initialValues changes to reset form
+import { watch } from 'vue'
+watch(() => props.initialValues, (newValues) => {
+    if (newValues) {
+        form.reset({ values: newValues })
+    }
+}, { deep: true })
+
 // Provide form context to child components
 provide('formContext', form)
 

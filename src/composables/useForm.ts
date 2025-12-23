@@ -229,7 +229,8 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
     })
 
     const setFieldValue = (name: string, value: any) => {
-        (values.value as any)[name] = value
+        console.log(`[useForm] setFieldValue ${name} =`, value)
+        ;(values.value as any)[name] = value
 
         if (!fieldsMeta.value[name]) {
             fieldsMeta.value[name] = { touched: false, dirty: false, valid: true, validated: false, pending: false }
@@ -507,8 +508,11 @@ export function useForm<T extends Record<string, any> = Record<string, any>>(
             fieldRules.value[name] = rules
         }
 
-        if (!(values.value as any)[name]) {
-            (values.value as any)[name] = ''
+        if ((values.value as any)[name] === undefined || (values.value as any)[name] === null) {
+            console.log(`[useForm] registering ${name}, setting default empty string`)
+            ;(values.value as any)[name] = ''
+        } else {
+            console.log(`[useForm] registering ${name}, existing value:`, (values.value as any)[name])
         }
 
         return {
