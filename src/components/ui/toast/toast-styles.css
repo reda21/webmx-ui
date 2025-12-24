@@ -1,0 +1,88 @@
+/* Toast Severity Styles - Reusing Button color variables */
+
+/* Default toast */
+.toast-default {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+}
+
+/* Secondary */
+.toast-secondary {
+  background-color: hsl(var(--btn-secondary-soft));
+  color: hsl(var(--btn-secondary-text));
+  border-color: hsl(var(--btn-secondary-border));
+}
+
+/* Success */
+.toast-success {
+  background-color: hsl(var(--btn-success-soft));
+  color: hsl(var(--btn-success-text));
+  border-color: hsl(var(--btn-success-border));
+}
+
+/* Info */
+.toast-info {
+  background-color: hsl(var(--btn-info-soft));
+  color: hsl(var(--btn-info-text));
+  border-color: hsl(var(--btn-info-border));
+}
+
+/* Warning */
+.toast-warn {
+  background-color: hsl(var(--btn-warn-soft));
+  color: hsl(var(--btn-warn-text));
+  border-color: hsl(var(--btn-warn-border));
+}
+
+/* Help */
+.toast-help {
+  background-color: hsl(var(--btn-help-soft));
+  color: hsl(var(--btn-help-text));
+  border-color: hsl(var(--btn-help-border));
+}
+
+/* Danger */
+.toast-danger {
+  background-color: hsl(var(--btn-danger-soft));
+  color: hsl(var(--btn-danger-text));
+  border-color: hsl(var(--btn-danger-border));
+}
+
+/* Contrast */
+.toast-contrast {
+  background-color: hsl(var(--btn-contrast-soft));
+  color: hsl(var(--btn-contrast-text));
+  border-color: hsl(var(--btn-contrast-border));
+}
+
+/* Progress bar styles */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: currentColor;
+  opacity: 0.3;
+  transition: width linear;
+}
+
+.toast-progress-animated {
+  animation: toast-progress-countdown linear forwards;
+}
+
+@keyframes toast-progress-countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Icon styles */
+.toast-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
